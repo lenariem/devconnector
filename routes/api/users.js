@@ -9,6 +9,7 @@ const {
     validationResult
 } = require('express-validator')
 
+//to use user model
 const User = require('../../models/User')
 
 // @route   POST api/users
@@ -51,7 +52,8 @@ router.post('/', [
 
             //get user gravatar
             const avatar = gravatar.url(email, {
-                //parameters of avatar and validation(r-no naked people, d -default avatar)
+                //parameters of avatar and validation(s-default size 200,r-no naked people, d -default avatar image if user has no own in email; gravatar grab image from email with oe user registered)
+                
                 s: '200',
                 r: 'pg',
                 d: 'mm'
@@ -78,11 +80,14 @@ router.post('/', [
 
             jwt.sign(
                 payload,
-                config.get('jwtSecret'),
-                {expiresIn: 360000},
+                config.get('jwtSecret'), {
+                    expiresIn: 360000
+                },
                 (err, token) => {
-                    if(err) throw err
-                    res.json({token})
+                    if (err) throw err
+                    res.json({
+                        token
+                    })
                 }
             )
 
